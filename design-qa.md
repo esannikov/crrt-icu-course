@@ -39,6 +39,7 @@ No actionable P0, P1, or P2 findings remain.
 ## Interactions Tested
 
 - select a patient and open the eight-module home screen;
+- scroll to and select the fifth patient (lithium intoxication) while preserving module 1–7 progress;
 - open module 1 and submit an incorrect answer;
 - verify the correct answer and rationale appear immediately;
 - open module 2 and submit the correct CRRT answer;
