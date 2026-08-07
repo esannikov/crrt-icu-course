@@ -10,12 +10,92 @@
   --rust: #a24e31;
   --rust-soft: #f2ddd3;
   --amber: #d99639;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "IBM Plex Sans Variable", "IBM Plex Sans", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 * { box-sizing: border-box; }
 
-.app-screen {
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 320px;
   min-height: 100%;
+  margin: 0;
+}
+
+body { min-height: 100vh; }
+
+button,
+input,
+textarea { font: inherit; }
+
+/* Production web mode: keep the protected prototype runtime intact but remove
+   its device-simulator presentation. The course behaves as a normal page. */
+.phone-stage {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 0;
+}
+
+.device-menu-bar,
+.phone-bezel,
+.device-camera,
+.status-bar,
+.home-indicator-svg,
+.keyboard-dock,
+.mobile-cursor {
+  display: none !important;
+}
+
+.phone-scale-box {
+  position: static;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.phone-device {
+  position: static;
+  width: 100% !important;
+  height: auto !important;
+  transform: none !important;
+  user-select: auto;
+}
+
+.device-screen {
+  position: static;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: visible;
+  border-radius: 0 !important;
+  background: var(--paper);
+  box-shadow: none;
+  cursor: auto;
+  user-select: auto;
+}
+
+.device-screen,
+.device-screen * {
+  cursor: auto !important;
+}
+
+.mobile-app-viewport {
+  position: static;
+}
+
+.app-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
   background:
     radial-gradient(circle at 92% 0%, rgba(217, 150, 57, 0.14), transparent 29%),
     var(--paper);
@@ -26,7 +106,7 @@
 
 .screen-content {
   min-height: 100%;
-  padding: 68px 22px max(34px, env(safe-area-inset-bottom));
+  padding: max(30px, env(safe-area-inset-top)) 20px max(34px, env(safe-area-inset-bottom));
 }
 
 .kicker,
@@ -399,4 +479,82 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(217,150,57,.55);
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+
+@media (min-width: 760px) {
+  .screen-content {
+    width: min(100% - 64px, 1120px);
+    margin-inline: auto;
+    padding: 58px 0 64px;
+  }
+
+  .patient-screen {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.8fr) minmax(450px, 1.35fr);
+    grid-template-areas:
+      "intro patients"
+      "note patients";
+    column-gap: clamp(48px, 7vw, 100px);
+    align-content: start;
+  }
+
+  .patient-screen .intro-header {
+    grid-area: intro;
+    position: sticky;
+    top: 58px;
+  }
+
+  .patient-screen .patient-list {
+    grid-area: patients;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 0;
+  }
+
+  .patient-screen .patient-choice:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .patient-screen .education-note {
+    grid-area: note;
+    align-self: start;
+    margin-top: 28px;
+  }
+
+  .home-screen {
+    display: grid;
+    grid-template-columns: minmax(280px, 360px) minmax(460px, 1fr);
+    grid-template-areas:
+      "hero modules"
+      "patient modules"
+      "actions modules"
+      "review modules";
+    column-gap: clamp(48px, 7vw, 96px);
+    align-content: start;
+  }
+
+  .home-screen .course-header { grid-area: hero; }
+  .home-screen .selected-patient { grid-area: patient; }
+  .home-screen .module-section { grid-area: modules; margin-top: 0; }
+  .home-screen .home-actions { grid-area: actions; }
+  .home-screen .review-date { grid-area: review; }
+
+  .course-screen,
+  .sources-screen,
+  .results-screen {
+    width: min(100% - 64px, 820px);
+  }
+
+  .question-block h1 { font-size: clamp(2.15rem, 4.5vw, 3.5rem); }
+
+  .source-list { grid-template-columns: 1fr 1fr; }
+  .sources-screen .education-note { max-width: 560px; }
+
+  .result-modules { grid-template-columns: 1fr 1fr; column-gap: 30px; }
+}
+
+@media (min-width: 1180px) {
+  .patient-screen .intro-header h1,
+  .course-header h1 { font-size: 4.35rem; }
+
+  .patient-choice { min-height: 116px; }
 }

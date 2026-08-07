@@ -1,54 +1,57 @@
-# Design QA
+# Design QA — responsive web correction
 
 ## Evidence
 
-- Source visual truth: `design-reference.png`
-- Browser-rendered implementation: `qa-implementation.jpg`
-- Side-by-side full comparison: `qa-comparison.jpg`
-- Focused comparison: `qa-comparison-focus.jpg`
-- Outer browser viewport: 1400 × 1200 CSS px
-- Phone screen: 393 × 852 CSS px at deviceScaleFactor 1
-- Source pixels: 852 × 1846; normalized to 393 × 852 for comparison
-- Implementation pixels: 393 × 852
-- State: module 2, card 1, correct `CRRT` answer revealed with explanation
+- Source problem-state screenshot: `/var/folders/jv/1z95f_wd0jl_vfhlbq1h7ltm0000gn/T/codex-clipboard-253bdae8-abb0-493d-859e-c9d0e30af148.png`
+- Source pixels: 2790 × 1682
+- Browser-rendered mobile implementation: `qa-responsive-mobile.png`
+- Mobile viewport and pixels: 390 × 844 CSS px, deviceScaleFactor 1
+- Browser-rendered desktop implementation: `qa-responsive-desktop.png`
+- Desktop viewport and pixels: 1440 × 1000 CSS px, deviceScaleFactor 1
+- Side-by-side full comparison: `qa-responsive-comparison.jpg`
+- Focused comparison: `qa-responsive-comparison-focus.jpg`
+- State: patient chooser, warm light theme, five adult cases visible
+
+The supplied screenshot is the rejected state: a phone simulator centered inside a desktop canvas. The intended target is the same course content and visual language presented as a normal responsive webpage without device chrome.
 
 ## Findings
 
 No actionable P0, P1, or P2 findings remain.
 
-- Fonts and typography: Manrope provides the bold modern display hierarchy from the selected direction; IBM Plex Sans keeps dense clinical copy readable. Weight, line height, wrapping, and small-label tracking were checked in the patient chooser and answer state.
-- Spacing and layout rhythm: the 393 × 852 phone viewport preserves 22 px side margins, consistent vertical rhythm, 40–52 px controls, and a clear question → decision ladder → feedback sequence.
-- Colors and tokens: warm paper, rust, amber, and restrained olive match the selected visual direction. Correct and incorrect states remain distinguishable without relying on color alone.
-- Image quality and asset fidelity: the target uses no photographic or illustrative assets. Runtime bezel, status bar, icons, and keyboard assets remain the protected template originals; no substitute CSS or SVG artwork was introduced.
-- Copy and content: Ukrainian clinical wording is standalone, adult-specific, concise, and visibly separated from the educational safety boundary.
-- Accessibility and behavior: semantic buttons and headings, immediate feedback, disabled answered states, focus-visible styling, reduced-motion support, and practical tap targets are present.
+- Fonts and typography: Manrope display type and IBM Plex Sans body type are preserved. Mobile headings wrap naturally; desktop headings scale without clipping or truncation.
+- Spacing and layout rhythm: the mobile layout uses the entire 390 px viewport with 20 px content margins. The desktop layout uses a centered 1120 px content grid with editorial copy on the left and patient cards on the right.
+- Colors and tokens: warm paper, rust, amber and olive tokens are unchanged. Correct/incorrect semantic states remain available throughout the course.
+- Image quality and asset fidelity: the course requires no photographic or illustrative content. Simulator bezel, status bar, device selector, home indicator, keyboard and cursor are all absent from the production presentation.
+- Copy and content: the five cases, eight modules, 80 cards and medical boundary are unchanged.
+- Responsive behavior: no horizontal overflow at 390 px or 1440 px. The body width equals the viewport at both tested sizes.
+- Accessibility and behavior: semantic headings and buttons remain intact, controls retain practical mobile tap sizes, focus styling and reduced-motion support remain present.
 
 ## Comparison History
 
-1. Initial patient-chooser capture revealed a P1 responsive defect: a desktop media query reacted to the 1400 px stage and forced a two-column list inside the 393 px phone, clipping cards. The media query was removed. The revised 393 × 852 capture shows a single-column, scrollable five-patient list with no horizontal overflow.
-2. The answer-state capture was repeated after the simulator keyboard completed its closing transition. Final evidence shows the intended unobstructed card state.
+1. P1 — the deployed page displayed the protected prototype device stage, iPhone selector, bezel and simulated screen on both desktop and physical phones. The production stylesheet now neutralizes only the presentation shell while preserving runtime integrity.
+2. P1 — the original interface stayed locked to a phone-sized column on desktop. Desktop layouts now use responsive two-column grids for patient selection and module navigation.
+3. Post-fix evidence at 390 × 844 and 1440 × 1000 confirms full-width mobile rendering, normal document scrolling, no device chrome and no horizontal overflow.
 
 ## Full-view Comparison Evidence
 
-`qa-comparison.jpg` shows the selected direction and implementation together. The implementation retains the defining visual features: warm editorial surface, assertive modern typography, slim progress treatment, vertical decision ladder, olive correct state, immediate rationale, and restrained borders.
+`qa-responsive-comparison.jpg` places the rejected simulator screenshot and corrected desktop page together. The correction removes the large empty canvas, phone frame and device menu, then uses the available desktop width for a balanced two-column layout.
 
 ## Focused Region Comparison Evidence
 
-`qa-comparison-focus.jpg` isolates the question, answer ladder, selected state, and explanation. Text remains readable at 1:1 phone scale, the selected answer is unambiguous, and the rationale follows immediately in the scroll flow.
+`qa-responsive-comparison-focus.jpg` isolates the title and patient cards. Typography, warm palette, borders and content hierarchy remain consistent while the layout changes from simulated hardware to responsive web.
 
 ## Interactions Tested
 
-- select a patient and open the eight-module home screen;
-- scroll to and select the fifth patient (lithium intoxication) while preserving module 1–7 progress;
-- open module 1 and submit an incorrect answer;
-- verify the correct answer and rationale appear immediately;
-- open module 2 and submit the correct CRRT answer;
-- verify the next-card action becomes enabled;
-- verify progress and source links render;
-- inspect browser console: no errors or warnings from the application.
+- patient chooser at 390 × 844;
+- patient chooser at 1440 × 1000;
+- selecting the septic-shock patient;
+- rendering the eight-module home screen after selection;
+- protected runtime integrity check;
+- production Pages build and static packaging tests;
+- browser console checked: no application errors or warnings.
 
 ## Follow-up Polish
 
-- P3: a future version could add a compact clinical-data strip to every modality card, not only case-context cards.
+- P3: additional intermediate-width screenshots could be retained for a future visual regression suite.
 
 final result: passed

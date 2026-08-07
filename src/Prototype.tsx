@@ -10,7 +10,6 @@ import {
 } from "@radix-ui/react-icons";
 import "@fontsource-variable/manrope/index.css";
 import "@fontsource-variable/ibm-plex-sans/index.css";
-import { MobileScroll } from "./mobile";
 import {
   buildCaseModule,
   commonModules,
@@ -113,7 +112,7 @@ export default function Prototype() {
   };
 
   return (
-    <MobileScroll className="app-screen">
+    <div className="app-screen">
       {screen === "patients" && <PatientChooser onChoose={choosePatient} />}
       {screen === "home" && (
         <HomeScreen
@@ -155,7 +154,7 @@ export default function Prototype() {
           onReset={resetCourse}
         />
       )}
-    </MobileScroll>
+    </div>
   );
 }
 
