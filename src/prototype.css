@@ -248,6 +248,34 @@ textarea { font: inherit; }
   line-height: 0.96;
 }
 
+.course-header-top,
+.course-screen-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.course-reset-button {
+  display: inline-flex;
+  min-height: 42px;
+  padding: 9px 12px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.28);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+
+.course-reset-button svg { width: 16px; height: 16px; }
+.course-reset-button:hover:not(:disabled) { border-color: #b9ad97; background: rgba(255, 255, 255, 0.62); color: var(--ink); transform: translateY(-1px); }
+.course-reset-button:disabled { opacity: 0.38; }
+
 .overall-progress {
   height: 8px;
   overflow: hidden;
@@ -490,6 +518,11 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(217,150,57,.55);
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+
+@media (max-width: 420px) {
+  .course-reset-button { width: 42px; padding: 0; }
+  .course-reset-button span { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 }
 
 @media (min-width: 760px) {

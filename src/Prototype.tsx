@@ -111,6 +111,11 @@ export default function Prototype() {
     setScreen("home");
   };
 
+  const requestResetCourse = () => {
+    if (answeredCount === 0) return;
+    if (window.confirm("Очистити всі відповіді? Обраний пацієнт залишиться.")) resetCourse();
+  };
+
   return (
     <div className="app-screen">
       {screen === "patients" && <PatientChooser onChoose={choosePatient} />}
@@ -125,6 +130,7 @@ export default function Prototype() {
           onChangePatient={() => setScreen("patients")}
           onSources={() => setScreen("sources")}
           onResults={() => setScreen("results")}
+          onReset={requestResetCourse}
         />
       )}
       {screen === "course" && (
@@ -136,6 +142,8 @@ export default function Prototype() {
           onAnswer={(selected) => submitAnswer(modules[moduleIndex].cards[cardIndex], selected)}
           onBack={() => setScreen("home")}
           onNext={nextCard}
+          canReset={answeredCount > 0}
+          onReset={requestResetCourse}
         />
       )}
       {screen === "sources" && <SourcesScreen onBack={() => setScreen("home")} />}
@@ -197,6 +205,7 @@ function HomeScreen({
   onChangePatient,
   onSources,
   onResults,
+  onReset,
 }: {
   patient: Patient;
   modules: CourseModule[];
@@ -207,11 +216,17 @@ function HomeScreen({
   onChangePatient: () => void;
   onSources: () => void;
   onResults: () => void;
+  onReset: () => void;
 }) {
   return (
     <main className="screen-content home-screen" data-testid="home-screen">
       <header className="course-header">
-        <span className="kicker">Замісна ниркова терапія у ВІТ</span>
+        <div className="course-header-top">
+          <span className="kicker">Замісна ниркова терапія у ВІТ</span>
+          <button className="course-reset-button" onClick={onReset} disabled={answeredCount === 0} aria-label="Скинути поточний результат" title="Скинути поточний результат">
+            <ReloadIcon aria-hidden /><span>Скинути</span>
+          </button>
+        </div>
         <h1>Від рішення<br />до моніторингу</h1>
         <div className="overall-progress" aria-label={answeredCount + " із 80 карток пройдено"}>
           <span style={{ width: String((answeredCount / 80) * 100) + "%" }} />
@@ -270,6 +285,8 @@ function CourseScreen({
   onAnswer,
   onBack,
   onNext,
+  canReset,
+  onReset,
 }: {
   module: CourseModule;
   moduleIndex: number;
@@ -278,6 +295,8 @@ function CourseScreen({
   onAnswer: (index: number) => void;
   onBack: () => void;
   onNext: () => void;
+  canReset: boolean;
+  onReset: () => void;
 }) {
   const card = module.cards[cardIndex];
   const answered = answer !== undefined;
@@ -285,7 +304,12 @@ function CourseScreen({
   const source = sources[card.sourceIds[0]];
   return (
     <main className="screen-content course-screen" data-testid="course-screen">
-      <button className="back-button" onClick={onBack} aria-label="Повернутися до модулів"><ArrowLeftIcon /></button>
+      <div className="course-screen-actions">
+        <button className="back-button" onClick={onBack} aria-label="Повернутися до модулів"><ArrowLeftIcon /></button>
+        <button className="course-reset-button" onClick={onReset} disabled={!canReset} aria-label="Скинути поточний результат" title="Скинути поточний результат">
+          <ReloadIcon aria-hidden /><span>Скинути</span>
+        </button>
+      </div>
       <header className="lesson-header">
         <span className="lesson-course">Замісна ниркова терапія у ВІТ</span>
         <div className="lesson-title"><strong>Модуль {moduleIndex + 1}</strong><span>·</span><span>{module.title}</span></div>
